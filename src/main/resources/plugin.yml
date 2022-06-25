@@ -1,0 +1,9 @@
+name: CompassAPI
+version: '${project.version}'
+main: me.minisvin228.compassapi.CompassAPI
+api-version: 1.18
+authors: [ minisvin228 ]
+
+commands:
+  compass:
+    description: "Gives compass"
