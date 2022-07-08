@@ -16,7 +16,7 @@ public class CompassItem extends ItemStack {
         super(Material.COMPASS);
         CompassMeta meta = (CompassMeta) getItemMeta();
         meta.setLodestoneTracked(false);
-        NamespacedKey key = CompassAPI.COMPASS_TARGET_KEY;
+        NamespacedKey key = CompassAPI.getCompassTargetKey();
         meta.setDisplayName(ChatColor.YELLOW + "Tracker");
         meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, playerName);
         setItemMeta(meta);

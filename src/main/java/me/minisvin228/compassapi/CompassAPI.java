@@ -3,11 +3,9 @@ package me.minisvin228.compassapi;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class CompassAPI extends JavaPlugin {
+import javax.naming.Name;
 
-    public static final NamespacedKey COMPASS_TARGET_KEY = new NamespacedKey(
-            getPlugin(CompassAPI.class), "target"
-    );
+public final class CompassAPI extends JavaPlugin {
 
     private CompassConfig compassConfig;
     private CompassStorage compassStorage;
@@ -41,5 +39,11 @@ public final class CompassAPI extends JavaPlugin {
 
     public CompassStorage getCompassStorage() {
         return compassStorage;
+    }
+
+    public static final NamespacedKey getCompassTargetKey() {
+        return new NamespacedKey(
+                CompassAPI.getPlugin(CompassAPI.class), "target"
+        );
     }
 }

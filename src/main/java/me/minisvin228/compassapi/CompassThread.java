@@ -43,7 +43,7 @@ public class CompassThread extends BukkitRunnable {
                     CompassMeta meta = (CompassMeta) compass.getItemMeta();
                     PersistentDataContainer container = meta.getPersistentDataContainer();
                     return container.has(
-                            CompassAPI.COMPASS_TARGET_KEY, PersistentDataType.STRING
+                            CompassAPI.getCompassTargetKey(), PersistentDataType.STRING
                     );
                 }).forEach(compass -> updateCompass(compass, world));
     }
@@ -53,7 +53,7 @@ public class CompassThread extends BukkitRunnable {
 
         PersistentDataContainer container = meta.getPersistentDataContainer();
         String targetName = container.get(
-                CompassAPI.COMPASS_TARGET_KEY, PersistentDataType.STRING
+                CompassAPI.getCompassTargetKey(), PersistentDataType.STRING
         );
 
         Player target = Bukkit.getPlayer(targetName);
