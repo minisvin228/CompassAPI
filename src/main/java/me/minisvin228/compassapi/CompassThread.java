@@ -63,6 +63,8 @@ public class CompassThread extends BukkitRunnable {
         Location location = storage.getLastPlayerLocation(target, world);
 
         meta.setLodestone(location);
+
+        compass.setItemMeta(meta);
     }
 
 }
