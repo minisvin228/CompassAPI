@@ -1,16 +1,23 @@
 package me.minisvin228.compassapi;
 
-import me.minisvin228.compassapi.CompassThread;
+import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class CompassAPI extends JavaPlugin {
 
-    private CompassThread compassThread;
+    public static final NamespacedKey COMPASS_TARGET_KEY = new NamespacedKey(
+            getPlugin(CompassAPI.class), "target"
+    );
+
     private CompassConfig compassConfig;
+    private CompassStorage compassStorage;
+    private CompassThread compassThread;
 
     @Override
     public void onEnable() {
         compassConfig = new CompassConfig(this);
+
+        compassStorage = new CompassStorage(this);
 
         compassThread = new CompassThread(this);
 
@@ -30,5 +37,9 @@ public final class CompassAPI extends JavaPlugin {
 
     public CompassConfig getCompassConfig() {
         return compassConfig;
+    }
+
+    public CompassStorage getCompassStorage() {
+        return compassStorage;
     }
 }

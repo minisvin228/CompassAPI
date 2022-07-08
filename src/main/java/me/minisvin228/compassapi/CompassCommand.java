@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class CompassCommand implements CommandExecutor, TabExecutor {
 
-    private CompassAPI plugin;
+    private final CompassAPI plugin;
 
     public CompassCommand(CompassAPI plugin) {
         this.plugin = plugin;

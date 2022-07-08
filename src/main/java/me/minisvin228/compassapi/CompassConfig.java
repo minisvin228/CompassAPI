@@ -4,7 +4,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public class CompassConfig {
 
-    private CompassAPI plugin;
+    private final CompassAPI plugin;
     private FileConfiguration mainConfig;
 
     public CompassConfig(CompassAPI plugin) {

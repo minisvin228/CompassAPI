@@ -1,19 +1,21 @@
 package me.minisvin228.compassapi;
 
 import me.minisvin228.compassapi.CompassAPI;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CompassMeta;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 public class CompassThread extends BukkitRunnable {
 
-    private CompassAPI plugin;
+    private final CompassAPI plugin;
 
     public CompassThread (CompassAPI plugin) {
         this.plugin = plugin;
@@ -23,26 +25,44 @@ public class CompassThread extends BukkitRunnable {
 
     @Override
     public void run() {
-        Bukkit.getOnlinePlayers().forEach(this::track);
+        CompassStorage storage = plugin.getCompassStorage();
+        Bukkit.getOnlinePlayers().forEach(target -> {
+            storage.registerPlayer(target);
+            storage.registerPlayerLocation(target);
+        });
+
+        Bukkit.getOnlinePlayers().forEach(this::updatePlayerCompasses);
     }
 
-    private void track(Player player) {
-        for (ItemStack item : player.getInventory().getContents()) {
-            if (item == null) continue;
-            if (item.getType() != Material.COMPASS) continue;
-            modifyCompass(item, player.getWorld());
-        }
+    private void updatePlayerCompasses(Player player) {
+        World world = player.getWorld();
+        Arrays.stream(player.getInventory().getContents())
+                .filter(Objects::nonNull)
+                .filter(item -> item.getType() == Material.COMPASS)
+                .filter(compass -> {
+                    CompassMeta meta = (CompassMeta) compass.getItemMeta();
+                    PersistentDataContainer container = meta.getPersistentDataContainer();
+                    return container.has(
+                            CompassAPI.COMPASS_TARGET_KEY, PersistentDataType.STRING
+                    );
+                }).forEach(compass -> updateCompass(compass, world));
     }
 
-    private void modifyCompass(ItemStack compass, World world) {
+    private void updateCompass(ItemStack compass, World world) {
         CompassMeta meta = (CompassMeta) compass.getItemMeta();
-        NamespacedKey key = new NamespacedKey(CompassAPI.getPlugin(CompassAPI.class), "target");
-        if (!meta.getPersistentDataContainer().has(key, PersistentDataType.STRING)) return;
-        Player target = Bukkit.getPlayerExact(meta.getPersistentDataContainer().get(key, PersistentDataType.STRING));
+
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+        String targetName = container.get(
+                CompassAPI.COMPASS_TARGET_KEY, PersistentDataType.STRING
+        );
+
+        Player target = Bukkit.getPlayer(targetName);
         if (target == null) return;
-        if (!target.getWorld().equals(world)) return;
-        meta.setLodestone(target.getLocation());
-        compass.setItemMeta(meta);
+
+        CompassStorage storage = plugin.getCompassStorage();
+        Location location = storage.getLastPlayerLocation(target, world);
+
+        meta.setLodestone(location);
     }
 
 }
