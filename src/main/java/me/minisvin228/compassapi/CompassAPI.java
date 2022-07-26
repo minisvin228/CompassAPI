@@ -41,7 +41,7 @@ public final class CompassAPI extends JavaPlugin {
         return compassStorage;
     }
 
-    public static final NamespacedKey getCompassTargetKey() {
+    public static NamespacedKey getCompassTargetKey() {
         return new NamespacedKey(
                 CompassAPI.getPlugin(CompassAPI.class), "target"
         );
