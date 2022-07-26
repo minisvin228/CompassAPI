@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class CompassStorage implements Listener {
+public class CompassStorage {
 
     private final CompassAPI plugin;
     private ConcurrentHashMap<UUID, ConcurrentHashMap<UUID, Location>> storage;
