@@ -3,8 +3,6 @@ package me.minisvin228.compassapi;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import javax.naming.Name;
-
 public final class CompassAPI extends JavaPlugin {
 
     private CompassConfig compassConfig;
